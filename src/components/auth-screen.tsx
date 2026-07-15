@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { getUser } from "@/server/user";
+import { createUser } from "@/server/user";
 import { useRouter } from "next/navigation";
 
 const signInSchema = z.object({
@@ -74,8 +74,14 @@ export default function AuthScreen({ defaultTab }: { defaultTab: "sign-in" | "si
         if (error) {
             setAuthError(error.message);
         } else {
+            const { data: sessionData } = await supabase.auth.getSession();
+            if (sessionData.session) {
+                await createUser({
+                    userId: sessionData.session.user.id,
+                    name: sessionData.session.user.user_metadata.name ?? "User",
+                });
+            }
             router.push("/");
-            await getUser();
             resetState();
         }
     };
@@ -84,7 +90,7 @@ export default function AuthScreen({ defaultTab }: { defaultTab: "sign-in" | "si
         setAuthError(null);
         const fullName = `${values.firstName} ${values.lastName}`.trim();
 
-        const { error } = await supabase.auth.signUp({
+        const { data: signUpData, error } = await supabase.auth.signUp({
             email: values.email,
             password: values.password,
             options: {
@@ -94,9 +100,15 @@ export default function AuthScreen({ defaultTab }: { defaultTab: "sign-in" | "si
 
         if (error) {
             setAuthError(error.message);
+        } else if (signUpData.session) {
+            await createUser({
+                userId: signUpData.session.user.id,
+                name: fullName,
+            });
+            router.push("/");
+            resetState();
         } else {
             router.push("/");
-            await getUser();
             resetState();
         }
     };

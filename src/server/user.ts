@@ -5,21 +5,18 @@ import { updateUserSchema } from "@/lib/schemas/user";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { getSupabaseUser, validateUser } from "./auth";
 
-export async function getUser() {
-    const supabaseUser = await getSupabaseUser();
-
-    const user = await prisma.user.upsert({
-        where: { id: supabaseUser.id },
-        update: {
-            name: supabaseUser.user_metadata.name ?? "User",
-        },
-        create: {
-            id: supabaseUser.id,
-            name: supabaseUser.user_metadata.name ?? "User",
-        },
+export async function createUser({
+    userId,
+    name,
+}: {
+    userId: string;
+    name: string;
+}) {
+    return prisma.user.upsert({
+        where: { id: userId },
+        update: { name },
+        create: { id: userId, name },
     });
-
-    return user;
 }
 
 export async function updateUser(name: string) {
