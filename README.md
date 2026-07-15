@@ -1,37 +1,14 @@
 # Brary
 
-A reading tracker built with Next.js (App Router), shadcn/ui, Prisma, and Supabase.
+Track your reading sessions. Start a timer for any book, see your reading history, and stay focused.
 
-## Getting Started
+## Usage
 
-1. Install dependencies:
+1. Add a book using the **New Book** button in the sidebar.
+2. Select a book from the list.
+3. Press **Start** to begin a reading session.
+4. Press **Stop** when you're done. The session is logged in your history.
 
-```bash
-bun install
-```
+## Tech
 
-2. Set up your `.env` file with Supabase and database credentials (see `.env.example`).
-
-3. Run database migrations:
-
-```bash
-bun x prisma migrate dev
-```
-
-4. Start the dev server:
-
-```bash
-bun run dev
-```
-
-## Project Structure
-
-```
-src/
-├── app/          # Next.js App Router pages and layout
-├── components/   # React components (client and server)
-│   └── ui/       # shadcn/ui components
-├── lib/          # Shared utilities, Prisma client, schemas
-├── server/       # Server actions
-└── providers/    # React context providers
-```
+Built with Next.js, shadcn/ui, Prisma, and Supabase.
