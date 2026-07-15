@@ -1,8 +1,8 @@
 "use client";
 
 import { createSession, endSession, getSessionsWithBooks } from "@/server/session";
-import { toast } from "sonner";
 import { useState } from "react";
+import { toast } from "sonner";
 import { ClockDisplay } from "./clock-display";
 import { Sidebar } from "./sidebar";
 import { StartButton } from "./start-button";
@@ -62,7 +62,7 @@ export function PageClient({ books, activeSession, sessions }: { books: Book[]; 
     }
 
     return (
-        <>
+        <div className="flex w-full flex-col gap-8 sm:flex-row sm:gap-0">
             <section className="flex flex-1 flex-col">
                 <div className="flex flex-1 flex-col items-center justify-center gap-10">
                     <ClockDisplay startedAt={session ? session.startedAt : null} bookName={session ? session.book.name : null} />
@@ -71,6 +71,6 @@ export function PageClient({ books, activeSession, sessions }: { books: Book[]; 
             </section>
 
             <Sidebar books={books} sessions={sessions} activeSession={session} selectedBookId={selectedBookId} onSelectBook={session ? () => {} : setSelectedBookId} />
-        </>
+        </div>
     );
 }
