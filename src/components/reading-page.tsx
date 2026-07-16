@@ -133,7 +133,7 @@ export default function ReadingDashboardClient({ activeSession, preparedBook }: 
                         </div>
 
                         <div className="flex flex-col gap-3 sm:flex-row">
-                            <Button size={"cta"} className="flex-1" disabled={loading} onClick={handleStart}>
+                            <Button size={"cta"} className="sm:flex-1" disabled={loading} onClick={handleStart}>
                                 {loading ? (
                                     <Spinner />
                                 ) : (
