@@ -22,7 +22,7 @@ export default async function Profile() {
     const [totalBooks, totalSessions] = await Promise.all([prisma.book.count({ where: { userId: user.id } }), prisma.session.count({ where: { userId: user.id } })]);
 
     return (
-        <div className="h-screen w-full space-y-6 p-6">
+        <div className="h-screen w-full space-y-6">
             <div className="flex flex-col gap-1">
                 <span className="text-primary font-mono text-[10px] tracking-widest uppercase">Console / Account</span>
                 <h1 className="text-3xl font-extrabold tracking-tight">System Profile</h1>
@@ -113,7 +113,7 @@ export default async function Profile() {
                             <BookOpen className="size-3.5" /> Activity Metrics
                         </span>
 
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                             <div className="space-y-1">
                                 <span className="text-muted-foreground flex items-center gap-1 text-[11px]">
                                     <BookOpen className="text-primary size-3.5" /> Total Books Saved

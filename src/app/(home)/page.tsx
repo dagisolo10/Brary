@@ -20,7 +20,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
     }
 
     return (
-        <main className="flex min-h-screen w-full flex-col justify-between gap-6 p-6">
+        <main className="flex min-h-screen w-full flex-col justify-between gap-6">
             <div className="flex flex-1 flex-col gap-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex flex-col gap-1">

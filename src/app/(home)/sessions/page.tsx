@@ -26,7 +26,7 @@ export default async function SessionsPage() {
     };
 
     return (
-        <div className="flex min-h-screen w-full flex-col gap-6 p-6">
+        <div className="flex min-h-screen w-full flex-col gap-6">
             <div className="flex flex-col gap-1">
                 <span className="text-primary font-mono text-[10px] tracking-widest uppercase">Console / Tracking</span>
                 <h1 className="text-3xl font-extrabold tracking-tight">Reading Sessions</h1>

@@ -64,13 +64,13 @@ export function BookCard({ id, name, formattedDate }: BookCardProps) {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between">
-                    <div className="relative flex w-full items-center justify-start overflow-hidden sm:h-12 sm:w-24">
-                        <div className="border-border bg-foreground/2 text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-lg border transition-all duration-300 ease-in-out group-hover:translate-x-16 group-hover:opacity-0">
+                <div className="flex items-center">
+                    <div className="relative flex w-24 items-center justify-start overflow-hidden">
+                        <div className="border-border bg-foreground/2 text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-lg border opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-0 sm:translate-x-0 sm:opacity-100 sm:group-hover:translate-x-16">
                             <Settings className="animate-spin-slow size-4" />
                         </div>
 
-                        <div className="absolute left-0 flex -translate-x-16 gap-1.5 opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100">
+                        <div className="absolute left-0 flex gap-1.5 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100 sm:-translate-x-16 sm:opacity-0">
                             <Button size={"icon-sm"} title="Edit Book" variant={"outline"} onClick={() => setIsEditDialogOpen(true)}>
                                 <Edit2 className="size-3.5" />
                             </Button>
@@ -80,7 +80,10 @@ export function BookCard({ id, name, formattedDate }: BookCardProps) {
                         </div>
                     </div>
 
-                    <Link href={`/?bookId=${id}`} className="inline-flex items-center gap-3 text-xs font-semibold tracking-wide text-emerald-500 transition-colors hover:text-emerald-400">
+                    <Link
+                        href={`/?bookId=${id}`}
+                        className="inline-flex flex-1 items-center justify-end gap-3 text-xs font-semibold tracking-wide text-emerald-500 transition-colors hover:text-emerald-400"
+                    >
                         <span className="relative flex size-3 overflow-hidden">
                             <Play className="absolute inset-0 size-3 fill-emerald-500 stroke-none transition-all duration-300 ease-in-out group-hover:translate-x-full group-hover:opacity-0" />
                             <Play className="absolute inset-0 size-3 -translate-x-full fill-emerald-500 stroke-none opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100" />
