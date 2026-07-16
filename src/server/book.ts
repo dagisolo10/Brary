@@ -14,9 +14,9 @@ export async function createBook({ name }: { name: string }) {
 
     const user = await validateUser();
 
-    revalidatePath("/");
+    await prisma.book.create({ data: { name, userId: user.id } });
 
-    return await prisma.book.create({ data: { name, userId: user.id } });
+    revalidatePath("/books");
 }
 
 export async function getBooks() {
@@ -39,9 +39,19 @@ export async function updateBook(id: string, { name }: { name: string }) {
         throw new Error("Book not found");
     }
 
-    revalidatePath("/");
+    await prisma.$transaction([
+        prisma.book.update({
+            where: { id, userId: user.id },
+            data: { name },
+        }),
+        prisma.session.updateMany({
+            where: { bookId: id },
+            data: { bookName: name },
+        }),
+    ]);
 
-    return await prisma.book.update({ where: { id, userId: user.id }, data: { name } });
+    revalidatePath("/books");
+    revalidatePath("/sessions");
 }
 
 export async function deleteBook(id: string) {
@@ -53,7 +63,7 @@ export async function deleteBook(id: string) {
         throw new Error("Book not found");
     }
 
-    revalidatePath("/");
+    await prisma.book.delete({ where: { id, userId: user.id } });
 
-    return await prisma.book.delete({ where: { id, userId: user.id } });
+    revalidatePath("/books");
 }

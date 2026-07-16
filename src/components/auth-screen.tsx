@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { createUser } from "@/server/user";
+import { getUser } from "@/server/user";
 import { useRouter } from "next/navigation";
 
 const signInSchema = z.object({
@@ -76,7 +76,7 @@ export default function AuthScreen({ defaultTab }: { defaultTab: "sign-in" | "si
         } else {
             const { data: sessionData } = await supabase.auth.getSession();
             if (sessionData.session) {
-                await createUser({
+                await getUser({
                     userId: sessionData.session.user.id,
                     name: sessionData.session.user.user_metadata.name ?? "User",
                 });
@@ -101,7 +101,7 @@ export default function AuthScreen({ defaultTab }: { defaultTab: "sign-in" | "si
         if (error) {
             setAuthError(error.message);
         } else if (signUpData.session) {
-            await createUser({
+            await getUser({
                 userId: signUpData.session.user.id,
                 name: fullName,
             });

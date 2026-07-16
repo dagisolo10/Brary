@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { createBook } from "@/server/book";
-import { PlusIcon } from "lucide-react";
-import { toast } from "sonner";
+import { Plus } from "lucide-react";
 import { useActionState, useState } from "react";
+import { toast } from "sonner";
 
 export function NewBookDialog() {
     const [name, setName] = useState("");
@@ -28,9 +28,8 @@ export function NewBookDialog() {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger render={<Button variant="outline" size="sm" className="w-full" />}>
-                <PlusIcon className="size-4" />
-                New Book
+            <DialogTrigger render={<Button className="text-xs font-semibold shadow-xl shadow-white/15" />}>
+                <Plus className="size-4" /> Add New Book
             </DialogTrigger>
 
             <DialogContent>
