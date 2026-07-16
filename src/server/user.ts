@@ -3,15 +3,9 @@
 import prisma from "@/lib/prisma";
 import { updateUserSchema } from "@/lib/schemas/user";
 import { createSupabaseServer } from "@/lib/supabase/server";
-import { getSupabaseUser, validateUser } from "./auth";
+import { validateUser } from "./auth";
 
-export async function createUser({
-    userId,
-    name,
-}: {
-    userId: string;
-    name: string;
-}) {
+export async function createUser({ userId, name }: { userId: string; name: string }) {
     return prisma.user.upsert({
         where: { id: userId },
         update: { name },
