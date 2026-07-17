@@ -144,7 +144,7 @@ export const Sidebar001Item = memo(function Sidebar001Item({ href, label, isActi
 
     return (
         <div className={cn(isActive ? "text-primary" : "", "relative")}>
-            <Icon className={cn("pointer-events-none absolute top-1/2 left-0 size-4 -translate-y-1/2")} />
+            <Icon className={cn("pointer-events-none absolute top-1/2 left-0 size-5 -translate-y-1/2")} />
 
             <motion.div
                 ref={itemRef}
@@ -172,7 +172,7 @@ export const Sidebar001Item = memo(function Sidebar001Item({ href, label, isActi
                     onMouseLeave={() => setHovered(null)}
                     className={cn("relative ml-4 flex items-center gap-2 rounded-xl py-1.5 pl-4 text-sm select-none", className)}
                 >
-                    <span className={cn("relative z-1 truncate")}>{label}</span>
+                    <span className={cn("relative z-1 truncate text-lg", isActive ? "font-bold" : "")}>{label}</span>
                     {isNew && <span className="bg-primary size-1.5 shrink-0 rounded-full" />}
                 </a>
             </motion.div>

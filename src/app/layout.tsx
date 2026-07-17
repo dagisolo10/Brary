@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
     title: "Brary",
-    description: "A reading tracker",
+    description: "A premium modern book and reading session manager",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
