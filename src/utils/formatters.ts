@@ -1,5 +1,7 @@
 export function formatDate(date: Date, time?: boolean) {
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", ...(time && { hour: "numeric", minute: "numeric" }) });
+    const timeZone = typeof window !== "undefined" ? Intl.DateTimeFormat().resolvedOptions().timeZone : "UTC";
+
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone, ...(time && { hour: "numeric", minute: "numeric" }) });
 }
 
 export function calculateDuration(startedAt: Date, endsAt: Date | null) {

@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { deleteBook, updateBook } from "@/server/book";
-import { formatDate } from "@/utils/formatters";
 import { Book } from "@prisma/client";
 import { BookOpen, Calendar, ChevronRight, Edit2, Play, Settings, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { LocalTime } from "./local-time";
 
 export function BookCard({ book }: { book: Book }) {
     const { createdAt, id, name } = book;
@@ -58,7 +58,7 @@ export function BookCard({ book }: { book: Book }) {
                         <h3 className="line-clamp-2 text-base leading-snug font-bold">{name}</h3>
                         <p className="text-muted-foreground flex items-center gap-1.5 text-[11px]">
                             <Calendar className="size-3" />
-                            Added {formatDate(createdAt, true)}
+                            Added <LocalTime date={createdAt} showTime />
                         </p>
                     </div>
 

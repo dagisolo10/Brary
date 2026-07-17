@@ -1,8 +1,9 @@
+import { LocalTime } from "@/components/local-time";
 import { ProfileUpdateDialog } from "@/components/profile-update-dialog";
 import prisma from "@/lib/prisma";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { getUser } from "@/server/user";
-import { formatDate, formatSessionDuration } from "@/utils/formatters";
+import { formatSessionDuration } from "@/utils/formatters";
 import { ArrowRight, BookOpen, Calendar, Clock, Fingerprint, Mail, Shield, User } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -119,7 +120,9 @@ export default async function Profile() {
                             <span className="text-muted-foreground flex items-center gap-1.5 font-mono text-[9px] tracking-widest uppercase">
                                 <Calendar className="size-3.5" /> Established
                             </span>
-                            <div className="text-primary text-lg font-bold">{formatDate(user.createdAt)}</div>
+                            <div className="text-primary text-lg font-bold">
+                                <LocalTime date={user.createdAt} />
+                            </div>
                         </div>
                         <p className="text-muted-foreground mt-4 text-[11px] leading-relaxed">This timestamp registers the exact point your system account records were initiated.</p>
                     </div>

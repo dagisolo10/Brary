@@ -1,7 +1,8 @@
+import { LocalTime } from "@/components/local-time";
 import { HourglassIcon } from "@/components/ui/hourglass";
 import { cn } from "@/lib/utils";
 import { getBook } from "@/server/book";
-import { calculateDuration, formatDate } from "@/utils/formatters";
+import { calculateDuration } from "@/utils/formatters";
 import { ArrowLeft, BookOpen, Calendar, Clock, History } from "lucide-react";
 import Link from "next/link";
 
@@ -28,7 +29,7 @@ export default async function BookDetailPage({ params }: { params: Promise<{ boo
                         <span className="text-primary font-mono text-[10px] tracking-widest uppercase">Library / Book Details</span>
                         <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">{book.name}</h1>
                         <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
-                            <Calendar className="size-3.5" /> Added {formatDate(book.createdAt, true)}
+                            <Calendar className="size-3.5" /> Added <LocalTime date={book.createdAt} showTime />
                         </p>
                     </div>
                 </div>
@@ -112,7 +113,7 @@ export default async function BookDetailPage({ params }: { params: Promise<{ boo
                                                 )}
                                             </div>
                                             <p className="text-muted-foreground flex items-center gap-1 text-xs">
-                                                <Calendar className="size-3" /> {formatDate(session.startedAt, true)}
+                                                <Calendar className="size-3" /> <LocalTime date={session.startedAt} showTime />
                                             </p>
                                         </div>
 

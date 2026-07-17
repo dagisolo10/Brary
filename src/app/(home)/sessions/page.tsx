@@ -1,7 +1,8 @@
+import { LocalTime } from "@/components/local-time";
 import { HourglassIcon } from "@/components/ui/hourglass";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getSessions } from "@/server/session";
-import { calculateDuration, formatDate } from "@/utils/formatters";
+import { calculateDuration } from "@/utils/formatters";
 import { BookOpen, Calendar, Clock, Inbox } from "lucide-react";
 
 export default async function SessionsPage() {
@@ -62,7 +63,7 @@ export default async function SessionsPage() {
                                             <TableCell className="text-muted-foreground px-6 py-4">
                                                 <div className="flex items-center gap-1.5 text-xs">
                                                     <Calendar className="size-3.5" />
-                                                    {formatDate(session.startedAt, true)}
+                                                    <LocalTime date={session.startedAt} showTime />
                                                 </div>
                                             </TableCell>
 
