@@ -62,7 +62,7 @@ export default function ChangePasswordPage() {
     };
 
     return (
-        <div className="min-h-screen py-8 sm:py-12">
+        <div className="min-h-screen">
             <div className="space-y-6 px-4 sm:px-6">
                 <Link href="/profile" className="group text-muted-foreground hover:text-foreground inline-flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase transition-colors">
                     <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-1" />

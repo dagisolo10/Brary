@@ -1,8 +1,7 @@
-import { Inbox } from "lucide-react";
-import { getBooks } from "@/server/book";
 import { BookCard } from "@/components/book-card";
-import { formatDateTime } from "@/utils/formatters";
 import { NewBookDialog } from "@/components/new-book-dialog";
+import { getBooks } from "@/server/book";
+import { Inbox } from "lucide-react";
 
 export default async function BooksPage() {
     const books = await getBooks();
@@ -30,7 +29,7 @@ export default async function BooksPage() {
             ) : (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
                     {books.map((book) => (
-                        <BookCard key={book.id} id={book.id} name={book.name} formattedDate={formatDateTime(book.createdAt)} />
+                        <BookCard key={book.id} book={book} />
                     ))}
                 </div>
             )}

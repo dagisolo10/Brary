@@ -1,29 +1,11 @@
-import { getSessions } from "@/server/session";
-import { formatDateTime } from "@/utils/formatters";
-import { BookOpen, Calendar, Clock, Inbox, Play } from "lucide-react";
+import { HourglassIcon } from "@/components/ui/hourglass";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { getSessions } from "@/server/session";
+import { calculateDuration, formatDate } from "@/utils/formatters";
+import { BookOpen, Calendar, Clock, Inbox } from "lucide-react";
 
 export default async function SessionsPage() {
     const sessions = await getSessions();
-
-    const calculateDuration = (startedAt: Date, endsAt: Date | null) => {
-        if (!endsAt) return null;
-        const diffMs = endsAt.getTime() - startedAt.getTime();
-        const totalSeconds = Math.floor(diffMs / 1000);
-
-        if (totalSeconds < 1) return "0s";
-
-        const hrs = Math.floor(totalSeconds / 3600);
-        const mins = Math.floor((totalSeconds % 3600) / 60);
-        const secs = totalSeconds % 60;
-
-        const parts = [];
-        if (hrs > 0) parts.push(`${hrs}h`);
-        if (mins > 0 || hrs > 0) parts.push(`${mins}m`);
-        parts.push(`${secs}s`);
-
-        return parts.join(" ");
-    };
 
     return (
         <div className="flex min-h-screen w-full flex-col gap-6">
@@ -80,7 +62,7 @@ export default async function SessionsPage() {
                                             <TableCell className="text-muted-foreground px-6 py-4">
                                                 <div className="flex items-center gap-1.5 text-xs">
                                                     <Calendar className="size-3.5" />
-                                                    {formatDateTime(session.startedAt)}
+                                                    {formatDate(session.startedAt, true)}
                                                 </div>
                                             </TableCell>
 
@@ -101,7 +83,7 @@ export default async function SessionsPage() {
                                             <TableCell className="px-6 py-4">
                                                 {isActive ? (
                                                     <div className="text-muted-foreground flex items-center gap-1.5 font-mono text-xs">
-                                                        <Play className="size-3.5 fill-amber-400 text-amber-400" />
+                                                        <HourglassIcon isAnimating size={14} className="fill-amber-400 text-amber-400" />
                                                         Timing...
                                                     </div>
                                                 ) : (

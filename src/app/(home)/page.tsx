@@ -1,8 +1,8 @@
+import ReadingDashboard from "@/components/reading-page";
 import prisma from "@/lib/prisma";
 import { validateUser } from "@/server/auth";
-import { Sparkles, Timer } from "lucide-react";
 import { getActiveSession } from "@/server/session";
-import ReadingDashboardClient from "@/components/reading-page";
+import { Sparkles, Timer } from "lucide-react";
 
 export const revalidate = 0;
 
@@ -53,7 +53,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 </div>
 
                 <div className="flex flex-1 items-center justify-center">
-                    <ReadingDashboardClient activeSession={activeSession} preparedBook={preparedBook} />
+                    <ReadingDashboard activeSession={activeSession} preparedBook={preparedBook} />
                 </div>
             </div>
 

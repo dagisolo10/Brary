@@ -2,8 +2,56 @@
 
 import prisma from "@/lib/prisma";
 import { createBookSchema, updateBookSchema } from "@/lib/schemas/book";
+import { formatSessionDuration, getTotalTime } from "@/utils/formatters";
 import { revalidatePath } from "next/cache";
 import { validateUser } from "./auth";
+
+export async function getBooks() {
+    const user = await validateUser();
+    return prisma.book.findMany({ where: { userId: user.id }, orderBy: { createdAt: "desc" } });
+}
+
+export async function getBook(id: string) {
+    const user = await validateUser();
+
+    const book = await prisma.book.findFirst({
+        where: {
+            id,
+            userId: user.id,
+        },
+        include: {
+            sessions: {
+                select: {
+                    id: true,
+                    endsAt: true,
+                    startedAt: true,
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+            },
+        },
+    });
+
+    if (!book) {
+        throw new Error("Book not found");
+    }
+
+    const totalTimeMs = getTotalTime(book.sessions);
+    const completedSessionsCount = book.sessions.filter((s) => s.endsAt !== null).length;
+
+    const averageTimeMs = completedSessionsCount > 0 ? Math.round(totalTimeMs / completedSessionsCount) : 0;
+
+    return {
+        ...book,
+        stats: {
+            totalSessions: book.sessions.length,
+            completedSessions: completedSessionsCount,
+            formattedTotalTime: formatSessionDuration(totalTimeMs),
+            formattedAverageTime: formatSessionDuration(averageTimeMs),
+        },
+    };
+}
 
 export async function createBook({ name }: { name: string }) {
     const parsed = createBookSchema.safeParse({ name });
@@ -17,11 +65,6 @@ export async function createBook({ name }: { name: string }) {
     await prisma.book.create({ data: { name, userId: user.id } });
 
     revalidatePath("/books");
-}
-
-export async function getBooks() {
-    const user = await validateUser();
-    return prisma.book.findMany({ where: { userId: user.id }, orderBy: { createdAt: "desc" } });
 }
 
 export async function updateBook(id: string, { name }: { name: string }) {

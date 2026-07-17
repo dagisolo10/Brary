@@ -1,10 +1,11 @@
-import Link from "next/link";
+import { ProfileUpdateDialog } from "@/components/profile-update-dialog";
 import prisma from "@/lib/prisma";
-import { getUser } from "@/server/user";
-import { redirect } from "next/navigation";
-import { formatDateTime } from "@/utils/formatters";
 import { createSupabaseServer } from "@/lib/supabase/server";
+import { getUser } from "@/server/user";
+import { formatDate, formatSessionDuration } from "@/utils/formatters";
 import { ArrowRight, BookOpen, Calendar, Clock, Fingerprint, Mail, Shield, User } from "lucide-react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function Profile() {
     const supabase = await createSupabaseServer();
@@ -19,7 +20,21 @@ export default async function Profile() {
 
     const user = await getUser({ userId: supabaseUser.id, name: supabaseUser.user_metadata?.name ?? "User" });
 
-    const [totalBooks, totalSessions] = await Promise.all([prisma.book.count({ where: { userId: user.id } }), prisma.session.count({ where: { userId: user.id } })]);
+    const [totalBooks, sessions] = await Promise.all([
+        prisma.book.count({ where: { userId: user.id } }),
+        prisma.session.findMany({ where: { userId: user.id }, select: { endsAt: true, startedAt: true } }),
+    ]);
+
+    let totalTimeMs = 0;
+
+    sessions.forEach(({ endsAt, startedAt }) => {
+        if (endsAt) {
+            const elapsedTime = endsAt.getTime() - startedAt.getTime();
+            totalTimeMs += elapsedTime;
+        }
+    });
+
+    const displayReadTime = formatSessionDuration(totalTimeMs);
 
     return (
         <div className="h-screen w-full space-y-6">
@@ -31,14 +46,15 @@ export default async function Profile() {
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div className="border-border relative overflow-hidden rounded-2xl border bg-linear-to-br from-[#141414] to-[#0A0A0A] p-6 md:col-span-2">
-                    <div className="bg-primary/5 absolute -top-10 -right-10 size-32 rounded-full blur-3xl" />
+                    <div className="bg-primary/15 absolute -right-10 -bottom-10 z-0 size-32 rounded-full blur-3xl" />
 
                     <div className="flex h-full flex-col justify-between gap-8">
                         <div className="flex items-center gap-4">
                             <div className="border-primary/20 bg-primary/5 text-primary flex size-16 shrink-0 items-center justify-center rounded-2xl border text-2xl font-bold">
                                 {user.name.slice(0, 2).toUpperCase()}
                             </div>
-                            <div className="space-y-1">
+
+                            <div className="flex-1 space-y-1">
                                 <div className="flex items-center gap-2">
                                     <h2 className="text-xl font-bold">{user.name}</h2>
                                     <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">Active</span>
@@ -47,6 +63,8 @@ export default async function Profile() {
                                     <Fingerprint className="text-muted-foreground size-3.5" /> ID: {supabaseUser.id.slice(0, 8)}...
                                 </p>
                             </div>
+
+                            <ProfileUpdateDialog currentName={user.name} />
                         </div>
 
                         <div className="border-border grid grid-cols-2 gap-4 border-t pt-4">
@@ -101,7 +119,7 @@ export default async function Profile() {
                             <span className="text-muted-foreground flex items-center gap-1.5 font-mono text-[9px] tracking-widest uppercase">
                                 <Calendar className="size-3.5" /> Established
                             </span>
-                            <div className="text-primary text-lg font-bold">{formatDateTime(user.createdAt)}</div>
+                            <div className="text-primary text-lg font-bold">{formatDate(user.createdAt)}</div>
                         </div>
                         <p className="text-muted-foreground mt-4 text-[11px] leading-relaxed">This timestamp registers the exact point your system account records were initiated.</p>
                     </div>
@@ -123,9 +141,9 @@ export default async function Profile() {
 
                             <div className="space-y-1">
                                 <span className="text-muted-foreground flex items-center gap-1 text-[11px]">
-                                    <Clock className="text-primary size-3.5" /> Total Sessions
+                                    <Clock className="text-primary size-3.5" /> Total Read Time
                                 </span>
-                                <div className="text-3xl font-extrabold tracking-tight">{totalSessions}</div>
+                                <div className="text-3xl font-extrabold tracking-tight">{displayReadTime}</div>
                             </div>
                         </div>
                     </div>

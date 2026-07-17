@@ -51,7 +51,7 @@ export function SideShell() {
             >
                 <Sidebar001 className="h-screen" defaultWidth={240} maxWidth={260}>
                     <Sidebar001Header>
-                        <span className="text-3xl font-bold">Brary</span>
+                        <span className="text-primary text-3xl font-bold">Brary.</span>
                     </Sidebar001Header>
 
                     <Sidebar001Content className="flex flex-col gap-4">

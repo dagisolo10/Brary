@@ -1,40 +1,41 @@
-import { Session } from "@prisma/client";
-
-export function formatDuration(ms: number) {
-    const totalSeconds = Math.floor(ms / 1000);
-
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    if (hours > 0) {
-        return `${hours}h ${minutes}m`;
-    }
-
-    if (minutes > 0) {
-        return `${minutes}m ${seconds}s`;
-    }
-
-    return `${seconds}s`;
+export function formatDate(date: Date, time?: boolean) {
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", ...(time && { hour: "numeric", minute: "numeric" }) });
 }
 
-export function formatDateTime(date: Date) {
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric" });
+export function calculateDuration(startedAt: Date, endsAt: Date | null) {
+    if (!endsAt) return null;
+
+    const ms = endsAt.getTime() - startedAt.getTime();
+    return formatSessionDuration(ms);
 }
 
-export function formatTime(date: Date) {
-    return date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+export function formatSessionDuration(ms: number): string {
+    if (ms <= 0) return "0s";
+
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+
+    const remainingMinutes = minutes % 60;
+    const remainingSeconds = seconds % 60;
+
+    const parts: string[] = [];
+
+    if (hours > 0) parts.push(`${hours}h`);
+    if (remainingMinutes > 0) parts.push(`${remainingMinutes}m`);
+    if (remainingSeconds > 0) parts.push(`${remainingSeconds}s`);
+
+    return parts.join(" ") || "0s";
 }
 
-export function sessionLabel(session: Session) {
-    const started = new Date(session.startedAt);
+export function getTotalTime(sessions: { id: string; endsAt: Date | null; startedAt: Date }[]) {
+    let totalTimeMs = 0;
 
-    if (session.endsAt) {
-        const ended = new Date(session.endsAt);
-        const duration = ended.getTime() - started.getTime();
-
-        return `${formatDuration(duration)} \u00B7 ${formatDateTime(started)}`;
+    for (const { endsAt, startedAt } of sessions) {
+        if (endsAt) {
+            totalTimeMs += endsAt.getTime() - startedAt.getTime();
+        }
     }
 
-    return `Active \u00B7 Started ${formatTime(started)}`;
+    return totalTimeMs;
 }

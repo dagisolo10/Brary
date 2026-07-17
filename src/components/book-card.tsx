@@ -5,20 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { deleteBook, updateBook } from "@/server/book";
-import { BookOpen, Calendar, Edit2, Play, Settings, Trash2 } from "lucide-react";
+import { formatDate } from "@/utils/formatters";
+import { Book } from "@prisma/client";
+import { BookOpen, Calendar, ChevronRight, Edit2, Play, Settings, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-interface BookCardProps {
-    id: string;
-    name: string;
-    formattedDate: string;
-}
+export function BookCard({ book }: { book: Book }) {
+    const { createdAt, id, name } = book;
 
-export function BookCard({ id, name, formattedDate }: BookCardProps) {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const [editName, setEditName] = useState(name);
+    const [editName, setEditName] = useState(book.name);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleEditSubmit = async (e: React.FormEvent) => {
@@ -51,17 +49,25 @@ export function BookCard({ id, name, formattedDate }: BookCardProps) {
     return (
         <>
             <div className="border-border bg-card hover:border-foreground/20 group relative flex flex-col gap-4 overflow-hidden rounded-2xl border p-6 transition-all">
-                <div className="flex gap-4">
+                <div className="flex items-center gap-4">
                     <div className="border-primary/20 bg-primary/5 text-primary flex size-12 shrink-0 items-center justify-center rounded-xl border">
                         <BookOpen className="size-5" />
                     </div>
-                    <div className="space-y-1">
+
+                    <div className="flex-1 space-y-1">
                         <h3 className="line-clamp-2 text-base leading-snug font-bold">{name}</h3>
                         <p className="text-muted-foreground flex items-center gap-1.5 text-[11px]">
                             <Calendar className="size-3" />
-                            Saved {formattedDate}
+                            Added {formatDate(createdAt, true)}
                         </p>
                     </div>
+
+                    <Link href={`books/${id}`} className="group">
+                        <span className="relative flex size-6 overflow-hidden">
+                            <ChevronRight className="absolute inset-0 transition-all duration-300 ease-in-out group-hover:translate-x-2 group-hover:opacity-75" />
+                            <ChevronRight className="absolute inset-0 -translate-x-full opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-50" />
+                        </span>
+                    </Link>
                 </div>
 
                 <div className="flex items-center">
@@ -84,9 +90,9 @@ export function BookCard({ id, name, formattedDate }: BookCardProps) {
                         href={`/?bookId=${id}`}
                         className="inline-flex flex-1 items-center justify-end gap-3 text-xs font-semibold tracking-wide text-emerald-500 transition-colors hover:text-emerald-400"
                     >
-                        <span className="relative flex size-3 overflow-hidden">
-                            <Play className="absolute inset-0 size-3 fill-emerald-500 stroke-none transition-all duration-300 ease-in-out group-hover:translate-x-full group-hover:opacity-0" />
-                            <Play className="absolute inset-0 size-3 -translate-x-full fill-emerald-500 stroke-none opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100" />
+                        <span className="relative flex h-4 w-5 overflow-hidden">
+                            <Play className="absolute inset-0 size-4 fill-emerald-500 stroke-none transition-all duration-300 ease-in-out group-hover:translate-x-1.5 group-hover:opacity-85" />
+                            <Play className="absolute inset-0 size-4 -translate-x-full fill-emerald-500 stroke-none opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-50" />
                         </span>
 
                         <span>Start Reading</span>

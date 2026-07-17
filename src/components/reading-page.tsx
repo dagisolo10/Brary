@@ -15,7 +15,7 @@ interface ClientProps {
     activeSession: Session | null;
 }
 
-export default function ReadingDashboardClient({ activeSession, preparedBook }: ClientProps) {
+export default function ReadingDashboard({ activeSession, preparedBook }: ClientProps) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -67,7 +67,13 @@ export default function ReadingDashboardClient({ activeSession, preparedBook }: 
 
         try {
             await endSession({ bookId: activeSession.bookId, sessionId: activeSession.id });
-            toast.success("Reading session saved!");
+            toast.success("Reading session saved!", {
+                action: {
+                    label: "View Sessions",
+                    onClick: () => router.push("/sessions"),
+                },
+                duration: 5000,
+            });
         } catch (err) {
             const message = err instanceof Error ? err.message : "Failed to end session";
             setError(message);
