@@ -4,6 +4,11 @@ export function formatDate(date: Date, time?: boolean) {
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone, ...(time && { hour: "numeric", minute: "numeric" }) });
 }
 
+export function formatTime(date: Date) {
+    const timeZone = typeof window !== "undefined" ? Intl.DateTimeFormat().resolvedOptions().timeZone : "UTC";
+    return date.toLocaleString("en-US", { timeZone, hour: "numeric", minute: "numeric" });
+}
+
 export function calculateDuration(startedAt: Date, endsAt: Date | null) {
     if (!endsAt) return null;
 

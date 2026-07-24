@@ -1,15 +1,19 @@
 "use client";
 
-import { formatDate } from "@/utils/formatters";
+import { formatDate, formatTime } from "@/utils/formatters";
 import { useEffect, useState } from "react";
 
-export function LocalTime({ date, showTime }: { date: Date; showTime?: boolean }) {
+export function LocalTime({ date, showTime, onlyTime }: { date: Date; showTime?: boolean; onlyTime?: true }) {
     const [formatted, setFormatted] = useState<string>("");
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setFormatted(formatDate(new Date(date), showTime));
-    }, [date, showTime]);
+        if (onlyTime) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setFormatted(formatTime(new Date(date)));
+        } else {
+            setFormatted(formatDate(new Date(date), showTime));
+        }
+    }, [date, onlyTime, showTime]);
 
     if (!formatted) return <span className="animate-pulse">Loading...</span>;
 

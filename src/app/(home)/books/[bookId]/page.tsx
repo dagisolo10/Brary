@@ -3,7 +3,7 @@ import { HourglassIcon } from "@/components/ui/hourglass";
 import { cn } from "@/lib/utils";
 import { getBook } from "@/server/book";
 import { calculateDuration } from "@/utils/formatters";
-import { ArrowLeft, BookOpen, Calendar, Clock, History } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Calendar, Clock, History } from "lucide-react";
 import Link from "next/link";
 
 export default async function BookDetailPage({ params }: { params: Promise<{ bookId: string }> }) {
@@ -113,7 +113,12 @@ export default async function BookDetailPage({ params }: { params: Promise<{ boo
                                                 )}
                                             </div>
                                             <p className="text-muted-foreground flex items-center gap-1 text-xs">
-                                                <Calendar className="size-3" /> <LocalTime date={session.startedAt} showTime />
+                                                <LocalTime date={session.startedAt} showTime />{" "}
+                                                {session.endsAt && (
+                                                    <>
+                                                        <ArrowRight className="size-3" /> <LocalTime date={session.endsAt} showTime onlyTime />
+                                                    </>
+                                                )}
                                             </p>
                                         </div>
 

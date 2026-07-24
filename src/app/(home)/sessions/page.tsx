@@ -3,7 +3,7 @@ import { HourglassIcon } from "@/components/ui/hourglass";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getSessions } from "@/server/session";
 import { calculateDuration } from "@/utils/formatters";
-import { BookOpen, Calendar, Clock, Inbox } from "lucide-react";
+import { ArrowRight, BookOpen, Calendar, Clock, Inbox } from "lucide-react";
 
 export default async function SessionsPage() {
     const sessions = await getSessions();
@@ -63,7 +63,13 @@ export default async function SessionsPage() {
                                             <TableCell className="text-muted-foreground px-6 py-4">
                                                 <div className="flex items-center gap-1.5 text-xs">
                                                     <Calendar className="size-3.5" />
+
                                                     <LocalTime date={session.startedAt} showTime />
+                                                    {session.endsAt && (
+                                                        <>
+                                                            <ArrowRight className="size-3" /> <LocalTime date={session.endsAt} showTime onlyTime />
+                                                        </>
+                                                    )}
                                                 </div>
                                             </TableCell>
 
